@@ -30,7 +30,7 @@ $(function () {
 
 
     //夜间模式切换
-    $("body").delegate(".mode_tabDots","click",function(){
+    $("body").delegate(".mode_tabDots", "click", function () {
         if (parseInt($(this).css("left")) == 25) {
             $(this).animate({
                 left: 0
@@ -68,7 +68,7 @@ $(function () {
     $(".search_contain>span").click(function () {
         $(".global_search").fadeOut()
     })
-    
+
     $(".top_search").click(function () {
         $(".global_search").fadeIn()
         return false
@@ -168,65 +168,91 @@ $(function () {
     var $myInp = $(".search_contain>input")
     $myBtn.click(function () {
         var $inp = $myInp.val().trim().toLowerCase()
+        console.log($inp)
 
-        var $arr = []
-        $.ajax({
-            url: "./source/blog.json",
-            dataType: 'json',
-            success(data) {
-                $.each(data, function (index, elm) {
-                    var $title = elm['blogtitle'].toLowerCase()
-                    if ($title.indexOf($inp) > -1) {
-                        $arr.push($title)
-                    }
+        // 发送get请求
+        const get = url => {
+            return $.get(url)
+        }
 
-                })
-                handleTitle($arr)
-            },
-            error(e) {
-                console.log(e)
+        // 拼接url
+        let url = '/api/blog/list?keyword=' + $inp
+
+        // 直接通过数据库keyword关键字搜索
+        get(url).then( res => {
+            if(res.errno != 0) {
+                alert('数据错误')
+                return 
             }
+            
+            const data = res.data || []
+
+            if(data.length === 0) {
+                alert('您找个der呢，俺这没有')
+                return
+            }
+            location.href = './index.html?keyword=' + $inp
+
         })
+
+        // var $arr = []
+        // $.ajax({
+        //     url: "./source/blog.json",
+        //     dataType: 'json',
+        //     success(data) {
+        //         $.each(data, function (index, elm) {
+        //             var $title = elm['blogtitle'].toLowerCase()
+        //             if ($title.indexOf($inp) > -1) {
+        //                 $arr.push($title)
+        //             }
+
+        //         })
+        //         handleTitle($arr)
+        //     },
+        //     error(e) {
+        //         console.log(e)
+        //     }
+        // })
     })
 
 
     // 字符串拼接
-    function handleTitle(obj) {
-        //console.log(obj)
-        if (!obj.length) {
-            alert('您搜索的内容不存在')
-        } else {
-            var $T = ''
-            for (var i of obj) {
-                $T = $T + i + ','
-            }
-            $(location).attr('href', '../search.html?id=' + escape($T))
-        }
-    }
+    // function handleTitle(obj) {
+    //     //console.log(obj)
+    //     if (!obj.length) {
+    //         alert('您搜索的内容不存在')
+    //     } else {
+    //         var $T = ''
+    //         for (var i of obj) {
+    //             $T = $T + i + ','
+    //         }
+    //         $(location).attr('href', '../search.html?id=' + escape($T))
+    //     }
+    // }
 
 
     var clientWidth = document.documentElement.clientWidth || body.documentElement.clientWidth
-    if(clientWidth<= 375){
-        $(".top_nav_mob").css('display','block')
-        $(".top_nav_pc").css('display','none')
-    }else{
-        $(".top_nav_mob").css('display','none')
-        $(".top_nav_pc").css('display','block')
+    if (clientWidth <= 375) {
+        $(".top_nav_mob").css('display', 'block')
+        $(".top_nav_pc").css('display', 'none')
+    } else {
+        $(".top_nav_mob").css('display', 'none')
+        $(".top_nav_pc").css('display', 'block')
     }
 
     //console.log($(".top_nav_mob").css('display'))
-    if($(".top_nav_mob").css('display') =='flex'){
-       var $zd =  $(".top_nav_mob").find(".top_left_nav")
-       var $mobMenu = $zd.find('.mob-sub-menu')
-      
-       $zd.click(function(){
-           if($mobMenu.css('display')== 'block'){
-               $mobMenu.stop().slideUp(300)
-           }else{
-            $mobMenu.stop().slideDown(300)
-           }
-       })
+    if ($(".top_nav_mob").css('display') == 'flex') {
+        var $zd = $(".top_nav_mob").find(".top_left_nav")
+        var $mobMenu = $zd.find('.mob-sub-menu')
+
+        $zd.click(function () {
+            if ($mobMenu.css('display') == 'block') {
+                $mobMenu.stop().slideUp(300)
+            } else {
+                $mobMenu.stop().slideDown(300)
+            }
+        })
     }
 
-  
+
 })
