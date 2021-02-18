@@ -6,43 +6,74 @@ $(function () {
             nowType = ''
         }
     } else {
-        nowType = decodeURIComponent(window.location.search.substring(4))
+        nowType = decodeURIComponent(window.location.search.substring(6))
     }
-    //console.log(nowType)
-    getAjaxContent(nowType)
 
-    function getAjaxContent(type) {
-        $.ajax({
-            url: "./source/blog.json",
-            dataType: "json",
-            success: function (data) {
-                $.each(data, function (index, ele) {
-                    if (type == '') {
-                        var $item = createItem(index, ele)
-                        $(".article_Ul").prepend($item)
-                    } else {
-                        for (var i in ele) {
-                            if (ele[i] == type) {
-                                var $item = createItem(index, ele)
-                                $(".article_Ul").prepend($item)
-                            }
-                        }
-                    }
-                })
-            },
-            error: function (e) {
-                console.log(e)
-            }
+    // 发送get请求
+    const get = url => {
+        return $.get(url)
+    }
+
+    // 显示格式化时间
+    const getFormatDate = dt => {
+        return moment(dt).format('LL')
+    }
+
+    // 拼接url
+    let url = '/api/blog/list?type=' + nowType
+    console.log(url)
+
+    get(url).then(res => {
+        if (res.errno != 0) {
+            alert('数据错误')
+            return
+        }
+
+        const data = res.data || []
+        data.forEach(item => {
+            $(".article_Ul").prepend($(`
+            <li class="${item.id} articlesLists"><i></i><span class="time">${getFormatDate(item.createtime)}</span><a href="">${item.title}</a>
+            </li>
+        `))
         })
-    }
 
-    function createItem(index, ele) {
-        var $item = $(`
-        <li class="${index + 1} articlesLists"><i></i><span class="time">${ele.blogtime}</span><a href="">${ele.blogtitle}</a>
-        </li>`)
+    })
 
-        return $item
-    }
+
+    // getAjaxContent(nowType)
+
+    // function getAjaxContent(type) {
+    //     $.ajax({
+    //         url: "./source/blog.json",
+    //         dataType: "json",
+    //         success: function (data) {
+    //             $.each(data, function (index, ele) {
+    //                 if (type == '') {
+    //                     var $item = createItem(index, ele)
+    //                     $(".article_Ul").prepend($item)
+    //                 } else {
+    //                     for (var i in ele) {
+    //                         if (ele[i] == type) {
+    //                             var $item = createItem(index, ele)
+    //                             $(".article_Ul").prepend($item)
+    //                         }
+    //                     }
+    //                 }
+    //             })
+    //         },
+    //         error: function (e) {
+    //             console.log(e)
+    //         }
+    //     })
+    // }
+
+    // function createItem(index, ele) {
+    //     var $item = $(`
+    //     <li class="${index + 1} articlesLists"><i></i><span class="time">${ele.blogtime}</span><a href="">${ele.blogtitle}</a>
+    //     </li>`)
+
+    //     return $item
+    // }
 
 
     // 点击跳转
