@@ -1,0 +1,130 @@
+# animation 帧动画
+## 使用：声明几个帧，把他们定义为一个名字，再赋给所需要动画的元素
+
+###书写代码：
+
+    div{
+        animation-name: hd; //动画的名字
+        animation-duration: 2s; // 动画执行时间，不设无效
+    }
+
+    @keyframes hd{
+        from{
+            (动画开始)
+            background:#fff
+        }
+
+        to{
+            (动画结束)
+            background:red
+        }
+
+    }
+
+### 帧还可以通过百分比设置,中间可以随便加帧
+0%{
+    开始
+}
+
+25%{
+    中间状态
+}
+
+100%{
+    停止
+}
+
+注意：a.帧的百分比顺序颠倒没关系的
+b.0%和100% 开始结束帧如果没有设置，没关系，系统默认使用原始样式，就元素本身自带的样式
+c.百分比间若有相同的属性是可以写在一起复用
+
+## 多个动画和时间配置:
+animation-name:translate,background,radius;
+animation-duration:4s,2s,1s  // 如果时间不够动画个数，将从头开始给，跟transition-duration一样 
+
+
+## 属性重叠影响
+animation-name:translate,background,radius  写在后面的动画优先级越高
+当属性重叠时，会先执行完后写的动画的时间，再执行剩余的前写的动画的时间
+
+
+## 不是所有属性都能加动画的，要有中间值的才能加
+
+## animation-iteration-count  控制动画的循环
+animation-iteration-count : 2 执行两次,也可以为每个动画单独设置循环： 2,1,3
+infinite ： 无限循环
+
+## animation-direction 控制动画的发展方向 
+a.normal   : 正常向
+b.reverse  : 反向
+前两个都是瞬间回到起始点
+
+c.alternate : 来去都缓慢
+d.alternate-reverse  :  反向的来去都缓慢
+
+
+## animation-delay  延迟再动画
+animation-delay: 2s 延迟两秒后再执行
+若果是循环动画，则只在一开始的时候会有延迟效果，开始动画后即任务完成，下一次循环不会再有延迟效果
+
+
+## animation-timing-function  调节动画的运动节奏
+ease: 缓动
+linear: 匀速
+ease-in:
+ease-out:
+ease-in-out:
+还可以自定义贝塞尔曲线:cubic-bezier()
+
+
+## currentColor 表示当前定义的文本颜色
+    div{
+        color:red;
+        box-shadow:55px 55px 0 currentColor;(影子将呈现红色)
+    }
+
+
+## animation-timing-function  步进动画
+animation-timing-function : steps(4,start)/steps(4,end)
+start与end的差异： 
+start会立刻执行动画，跳到第二帧;
+end会在第一帧停留一段时间再执行
+
+step-start/step-end : 实现单帧的动画
+
+
+## animation-play-state 控制动画暂停播放
+animation-play-state : paused / running 
+
+
+## animation-fill-mode   控制动画的填充模式，元素执行动画前和执行后的状态
+默认值(不写) ： 从原始状态执行动画，再回到原始状态
+backwards ： 从第一帧开始执行动画，再回到原始状态 (回看状态)
+forwards  ： 从原始状态开始执行动画，到动画最后一帧停止，不再回到原始状态 (前看状态)
+both  ： 从第一帧开始执行动画，到最后一帧停止，并不再回到原始状态 (兼顾backwards和forwards的状态，跟原始状态没关系了)
+
+### 简写 ：animation: hd forwards 2s(持续时间) .5s(延迟时间)
+
+
+
+
+## 实例练习:
+1.小球动画
+
+2.提交按钮旁边的小点动画
+小点实现：
+
+    div::after{
+        content:'';
+        width:3px;
+        height:3px;
+        display:inline-block;
+        box-shadow:3px 0 0 currentColor,9px 0 0 currentColor,15px 0 0 currentColor
+        (可用阴影来做小点，后面再用动画控制一段时间出现一个小点)
+        }
+
+
+
+## 动画库：
+1.swiper
+2.animate.css

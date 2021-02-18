@@ -1,0 +1,40 @@
+article .left_main .article_box .sub_title{
+    text-align: center;
+    font-size: 2em;
+    margin-bottom: .6rem;
+}
+article .left_main .article_box .sub_title span{
+    color: #0099e0;
+}
+article .left_main .article_box .content_box .Lists .years{
+    font-size: .3rem;
+    font-weight: 600;
+    height: 1rem;
+    line-height: 1rem;
+    border-left: 4px solid rgba(224, 221, 221, 0.5);
+    padding-left: .6rem;
+    position: relative;
+}
+article .left_main .article_box .content_box .Lists ul li{
+    font-size: .3rem;
+    font-weight: 400;
+    line-height: 1rem;
+    border-left: 4px solid rgba(224, 221, 221, 0.5);
+    padding-left: .4rem;
+    position: relative;
+}
+article .left_main .article_box .content_box .Lists i{
+    width: .13rem;
+    height: .13rem;
+    border-radius: 50%;
+    background: rgb(86, 86, 247);
+    display: inline-block;
+    position: absolute;
+    left: -.1rem;
+    top: .4rem;
+}
+article .left_main .article_box .content_box .Lists ul li .time{
+    margin-right: .5rem;
+    font-weight: 500;
+    color:var(--color-gray-500) ;
+}

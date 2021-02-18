@@ -1,0 +1,108 @@
+# CSS3 变形透视动画
+
+## 移动动画
+1.transform:translateX(100px/100%/3em)  translateY(100px/100%/3em) 控制在X/Y轴的二维移动
+
+简写：transform:translate(X偏移量/Y偏移量)
+
+这里的%，对应的是元素本身的width和height
+
+2.居中的多种实现方案
+a.flex实现居中
+
+b.定位实现居中
+
+    position:absolute;
+    left:50%;
+    top:50%;
+    margin-left:-200px; // 这里加两个margin是因为定位后的是左上角点的位置，而不是元素中心，要移到元素中心
+    margin-top:-200px;  // 而这里不能是%，%不是相对自身
+    width:400px;
+    height:400px; 
+
+c.定位加变形实现居中
+
+    position:absolute;
+    left:50%;
+    top:50%;
+    transform:translate(-50%，-50%) // 用translate的%就是比对自身的了
+    width:400px;
+    height:400px; 
+
+3.transform:translateZ() Z轴移动
+
+translate3d(x, y, z)  控制在X/Y/Z轴的三维移动
+
+4.text-transform:uppercase   全部字转为大写
+
+5.div:target  移动端元素被点击触发
+
+6.transition:1s : 过渡时间   想让哪个元素产生过渡就加到哪个元素
+！！颜色渐变也能用transition来实现
+
+## 缩放动画
+1.transform:scaleX(2)  scaleY(1) 
+简写 scale(X , Y)
+
+scaleZ() Z轴缩放
+
+scale3d(x , y , z) 改变三轴
+
+
+
+## 旋转动画
+1.transform:rotateX/Y/Z(90deg)
+加transition:1s 终于可以做关闭按钮旋转效果了555
+
+2.transform:rotate3d(1,0,1,195px)  根据向量值控制旋转，前面三个值是各个轴旋转的比例，后面带px的才是真正旋转角度
+
+## 倾斜动画
+transform:skewX/Y(45deg)
+简写:skew(X , Y) : skew(45deg,-45deg)
+
+
+## 动画锚点设置
+transform-origin:left top 
+也可以数值 100px 100px 
+百分比  100% 100%
+也可以放到元素外面  200% 200%
+也可以加Z轴： left bottom 300px (Z轴不能设百分比的，要给单位)
+
+
+## 透视 
+perspective(900px)
+数值表示透视力度，数值越小透视越强烈
+两种添加方法有区别：
+1.直接加到元素transform上：
+transform:perspective(900px)
+这个元素统一观察角度，如果设给父元素，则父元素跟子元素会产生统一透视,一般都用此方法
+
+2.方法形式加给父元素：
+.box{
+    perspective:600px
+}
+会只给子元素产生透视效果，父元素将没有透视效果 
+
+
+## 三维显示
+如果有z轴参与，有三维空间，要加
+transform-style:preserve-3d
+
+
+## 改变观察角度：
+perspective-origin: -1000px 200px (left bottom)
+
+
+## 设置旋转后背面不可见
+backface-visibility:hidden
+
+
+
+
+## 案例制作 
+### 旋转图片墙
+设旋转锚点为 transform-origin: center center -200px
+
+### 制作立方体
+旋转锚点设置为正方体中点
+通关旋转制作

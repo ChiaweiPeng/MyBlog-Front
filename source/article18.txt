@@ -1,0 +1,161 @@
+# 深浅拷贝
+
+复制引用类型时，由于复制的只是指向对象的指针，所以新旧对象会互相影响
+
+        var color1=["red","blcak"];
+        var color2=color1;
+        console.log(color2);
+        color2.push("blue");
+
+        console.log(color2)         // 简单的复制引用类型，将会导致互相影响
+        console.log(color1)         // red black blue
+
+怎么能做到不互相影响呢？就涉及到深浅复制
+
+###一：浅复制
+        var color3=[];
+        for(var i=0;i<color1.length;i++){
+            color3[i]=color1[i]
+        };
+        console.log(color3)         // 遍历取到color1一样的值 red black blue
+        color3.push("pink");
+
+        console.log(color3)         // 此时向color3中添加值，将不会影响color1
+        console.log(color1)         // 还是 red black blue
+
+        这一次，我们创建了一个空数组，并通过for循环，将color1数组中的每一个值都复制给color3中；
+        这样由于color3只是通过循环取到与color1相等的值，而并没有与color1指向同一个对象，
+        所以它们不会相互影响
+
+#####以上这种，只复制了第一层属性的方式就叫做浅复制
+浅复制的局限：可以看到以上我们复制的数组的每一项都是基本类型数据，假设数组中某一项保存的是一个对象，而这个对象又保存着另一个对象，如：
+
+        var person={
+            name:"pjw",
+            age:23,
+            score:{
+                math:85,
+                english:119
+            }
+        }
+      score对象的属性还是一个对象，如果还是通过上面的for循环去取，到对score复制时，就还是只复制到了地址
+      **所以通过只复制第一层属性的浅复制，虽然能取到所需的值，但是会出现相互影响情况
+
+
+      浅复制的函数封装
+      function shallowCopy(obj){
+            var result;
+            if(Object.prototype.toString.call(obj)=='[object Array]'){
+                result=[];
+                for(var i=0;i<obj.length;i++){
+                    result[i]=obj[i];
+                }
+            }
+            else if(Object.prototype.toString.call(obj)=='[object Object]'){
+                result={};
+                for( var attr in obj){
+                    result[attr]=obj[attr];
+                }
+            }
+            else{
+                return obj;
+            }
+
+            return result;
+        }
+
+        var person2=shallowCopy(person);
+        console.log(person2)
+
+        person2.name="lyq";
+        person2.age=18;
+        person2.score.math=100;         // 改变值
+        person2.score.english=11;
+
+        console.log(person2);
+        console.log(person)             
+        可见虽然person的第一层属性不受影响；但是第二层的属性却受到影响被更改了      
+
+
+###二：深复制
+######要想还能复制到对象中的对象，就要对所有对象中的引用类型的值，遍历到都是基本类型的值为止，再来进行复制
+######**所以深复制的核心是递归，递归到最深层的基本类型，再进行复制
+###### 进行递归的目的是深挖到最深的基本数据类型
+
+        function deepCopy(obj){
+            var result;
+            先判断传进来的是数组还是对象，数组和对象分别递归；
+            
+            if(Object.prototype.toString.call(obj)=="[object Array]"){
+                result=[];
+                // 数组用for
+                for(var i=0;i<obj.length;i++){
+                    这里，取到obj中的一项（属性），再传进本函数，再判断一次
+                    如果这一项（属性）是基本类型了，那么跳到5，直接返回给result，
+                    如果还不是，又会再调用一次，直至它是基本类型
+
+                    //这里原本是deepCopy(obj[i]),用arguments.callee可以调用本函数，且能避免错误
+                    result[i]=arguments.callee(obj[i])
+                }
+            }   
+                                                        // 注意这里的第一个object，的o一定要是小写的
+            else if(Object.prototype.toString.call(obj)=="[object Object]"){
+                result={};
+                // 对象用for...in
+                for(var attr in obj){
+                    result[attr]=arguments.callee(obj[attr])
+                }
+            }
+            else{
+                // 5步
+                // 取到基本类型了，就返回给result
+                return obj;
+            }
+            return result;  // 最后再把遍历好的result整个返回出去，作为新的对象
+            
+        }
+
+        var person={
+            name:"pjw",
+            age:23,
+            score:{
+                math:82,
+                english:119
+            }
+        }
+
+        var person2=deepCopy(person);
+        console.log(person2)            //成功复制了一个副本
+
+        person2.name="lyq";
+        person2.age=18;
+        person2.score.math=60;
+        person2.score.english=110
+        console.log(person2)            
+
+        console.log(person)             
+        // 可见无论person2副本怎么变动，都不会影响到原对象，因为它们不是指向同一个对象
+
+
+        var arr1=[108,99,{name:"pjw",age:"23"},{friends:"zs,ls"}];
+        console.log(Object.prototype.toString.call(arr1))
+
+       // var arr2=arr1;   ? 你不用deepCopy去复制你直接复制？玩你🐎呢
+        var arr2=deepCopy(arr1)
+        arr2[2].name="lyq";
+        arr2[2].age=18;
+        arr2[0]=12;
+        arr2[1]=6;
+        console.log(arr2)
+        console.log(arr1)
+
+
+###总结：
+所谓深浅复制，其实都是对于引用类型而言的，都是**为了解除新旧对象间的耦合，
+ 使新旧对象不指向同一对象，而是创建一个新的副本，从而不会相互影响
+        
+
+ #####*对于深浅复制的区别：核心关键点就是 是只复制了第一层属性 还是完全复制了所有的属性。
+对于只有一层属性的引用类型对象，可以使用浅复制，即可复制出完全独立的副本；
+
+而对于有两层以上属性的引用类型对象，就要使用深复制，才能创建出完全独立的副本。

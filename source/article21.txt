@@ -1,0 +1,31 @@
+# Vue生命周期总结及父子组件生命周期
+
+## 生命周期
+1.beforeCreate：在 new 一个 vue 实例后，只有一些默认的生命周期钩子和默认事件，其他的东西都还没创建。
+
+2.created：data 和 methods 都已经被初始化好了。（如果要调用 methods 中的方法，或者操作 data 中的数据，最早可以在这个阶段中操作）
+
+3.beforeMount：在内存中已经编译好了模板了，但是还没有挂载到页面中，此时，页面还是旧的。
+
+4.mounted：Vue 实例已经初始化完成了。此时组件脱离了创建阶段，进入到了运行阶段。 （*如果我们想要通过插件操作页面上的 DOM 节点，最早可以在这个阶段中进行）
+
+5.beforeUpdate：页面中的显示的数据还是旧的，data 中的数据是更新后的， 页面还没有和最新的数据保持同步。
+
+6.updated：页面显示的数据和 data 中的数据已经保持同步了，都是最新的。
+
+7.beforeDestroy：Vue 实例从运行阶段进入到了销毁阶段，这个时候上所有的 data 和 methods ， 指令， 过滤器 ……都还是处于可用状态。还没有真正被销毁。
+
+8.destroyed：这个时候上所有的 data 和 methods ， 指令， 过滤器 ……都是处于不可用状态。组件已经被销毁了。
+
+
+
+## 父子组件生命周期顺序
+1.加载渲染过程
+都是先父运行到beforeMount，再转到子生命周期直到子挂载完，再跳出来挂载父
+父beforeCreate->父created->父beforeMount->子beforeCreate->子created->子beforeMount->子mounted->父mounted
+
+2.子组件更新过程
+父beforeUpdate->子beforeUpdate->子updated->父updated
+
+3.销毁过程
+父beforeDestroy->子beforeDestroy->子destroyed->父destroyed

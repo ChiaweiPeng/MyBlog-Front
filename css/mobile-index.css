@@ -1,0 +1,85 @@
+/* 首页头部，幻灯片样式 */
+header .header_banner .banner_tab ul.tab_pics{
+    /*  width: 10633px; */
+     margin-left: 0;
+ }
+ header .header_banner .banner_tab ul.tab_pics li{
+     display: none;
+     position: absolute;
+ }
+ header .header_banner .banner_tab ul.tab_pics li:first-child{
+     display: block;
+ }
+ header .header_banner .banner_tab ul.tab_pics li img{
+     display: block;
+     height: 5rem;
+     object-fit: cover;
+ }
+
+
+ /* 正文开始 */
+/* 首页正文样式 */
+article .article .title h1{
+    font-size: .7rem;
+    font-weight: bolder;
+}
+article .article .title{
+    text-align: center;
+    line-height: 1rem;
+}
+article .article .sub_info{
+    margin-top: .2rem;
+    font-size: .3rem;
+    font-weight: 400;
+    text-align: center;
+    line-height: .5rem;
+}
+article .article .sub_info p{
+    display: inline;
+}
+article .article .sub_info .dots{
+    font-weight: bolder;
+    margin: 0 3px;
+}
+article .article .sub_info p i{
+    margin-right: 5px;
+}
+article .article .sub_info .biaoqian:hover{
+    text-decoration: underline;
+}
+article .article .sub_title h2{
+    font-size: .5rem;
+    font-weight: 700;
+}
+article .article .sub_title{
+    margin-top: 1.2rem;
+    padding-bottom: .3rem;
+    border-bottom: 1px solid var(--color-gray-300);
+}
+
+article .article .blog_btn button{
+    width: 2rem;
+    font-size: .3rem;
+    padding: .1rem .2rem;
+    border: none;
+    background:rgb(50, 172, 212);
+    color: var(--color-gray-200);
+    border-radius: .1rem;
+    position: absolute;
+    bottom: .2rem;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    cursor: pointer;
+    outline: none;
+}
+article .article .blog_btn button i{
+    font-size: .22rem;
+    margin-left: .1rem;
+    vertical-align: 1px;
+}
+article .article .blog_btn button:hover{
+    background:#0099e0 ;
+}
+
+

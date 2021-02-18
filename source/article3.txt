@@ -1,0 +1,112 @@
+# 下面分析hover的作用方法：
+1、改变本身样式
+       #buttonOnMap:hover {
+            background-color: rgba(43, 143, 243, 0.63);
+        }
+
+2、如果你#b元素是#a元素的子元素，可以直接通过 #a #b {...}这种方式定义CSS样式来控制
+
+       #mapDiv:hover #buttonOnMap{
+            background-color: rgba(43, 143, 243, 0.63);
+        }
+
+3、#a与#b是亲兄弟关系，有相同的父节点，且#b跟#a紧临，可以通过 #a + #b{..}来控制#b里面的元素样式；
+
+        #buttonFlag:hover + #buttonOnMap{
+            background-color: rgba(43, 143, 243, 0.63);
+        }
+
+# 关于缩小网站后有些部分会出现移位
+尽量都使用 left：em 
+1.使用em比例
+2.尽量都使用left不要用right,用right就会移位了，因为以右为基准
+
+# 
+ li.active>* 
+使li下的所有元素都加上了样式
+
+# 正确符号 使用了：
+content：'\2714\FE0Ez'
+utf-8转码
+
+# 分区域不同颜色
+.section{}
+.section:nth-child(2n)
+
+# 渐变色
+background-image: linear-gradient(direction, color-stop1, color-stop2, ...);
+
+background-image: linear-gradient(to bottom,transparent 0%,transparent 50%,rgba(0,0,0,0.2) 100%);
+
+rgba(0,0,0,a) b%  黑色透明,a越大越黑,b越大越浅
+
+# 三栏左右，设浮动，一定要写在中间主区域的前面
+是HTML里一定要写在前面，CSS里前后无所谓
+
+# 单行文本省略显示小点 
+ white-space: nowrap; ：空白区域不换行
+ text-overflow: ellipsis;
+ overflow: hidden;
+
+ #  ！！血的教训：
+ 不能一开始就设置body的高度，然后正文又去用高度%
+ body的高度最后是要删掉的
+ 删掉就崩了
+ 
+# 很多时候，想用float之前，先考虑一下设inline-block是否可以实现
+
+# 图片背阴影
+box-shadow: h-shadow v-shadow blur spread color inset;
+h-shadow：水平阴影位置
+v-shadow：垂直阴影位置
+blur：模糊距离
+spread：阴影大小
+inset/outset：可选内外侧
+
+
+# a元素里包含img ：解决图片下面的白边
+img 设 vertical-align:middle
+
+# 内容用了定位，就代表区域的高度不再能随着内容高度变化而变化，所以尽量避免使用定位
+
+# 要使用普遍样式的元素，不要再在前面加#号id选择了
+
+# 指定类型选择 :
+input[type='text']{}
+IE6下不兼容
+多个选择：
+input[type='text'],[type='password']{}
+
+# 问题
+1.怎么弹性布局，特别高度设置 : 注意要让内容去撑开高度
+2.怎么节省CSS代码量，抽出统一的: 编写时一定要有全局观，不要写一个区域就只盯着这个区域，多看看其他区域有没有类似的样式，抽出相似的样式为页面普遍样式
+3.图片加了透明遮罩后怎么再a元素还能链接 : 要用a元素包起来全部的，包住透明遮罩
+4.怎么实现后台数据刷新
+5.怎么日常维护更新
+
+### 提很烦的h2和h3样式
+### 解决高度问题 : 一定要让内容去决定高度，不要固定高，用padding去拉大就行
+### 小组的右边栏和同城的右边栏样式可以提一下
+### main区域可以提一下 overflow:hidden
+### 用js根据评分分数显示星星数
+
+
+JS坑笔记：
+switch case语句也可以用来进行范围判断
+1.一般用法：
+switch(x){
+    case 值1:
+    .......;
+    break;
+    default:
+    .....;
+}
+2.范围用法:  括号里一定要用true
+switch(true){
+    case x<10:
+    .....;
+    break;
+    default:
+    .....;
+}
+ 不用进行两边的范围判断，满足一个范围就会跳出的

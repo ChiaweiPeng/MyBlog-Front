@@ -1,0 +1,77 @@
+# JS中的栈内存与堆内存
+
+##js引擎存储变量主要有两种位置：栈内存和堆内存
+
+栈内存：主要存储基本数据类型，包括Boolean Number String Undefined Null 以及对象变量的指针
+堆内存：主要负责存储引用类型，如Object这种变量类型的存储
+
+栈内存：保存的变量一般都是有已知大小或者是有范围上限的，算作一种简单的存储。
+堆内存：保存的变量类型在大小上一般都是未知的。
+这也是为什么Null作为一个Object类型的变量却保存在栈内存的原因（大小已知为空）
+
+
+变量复制值给新变量时：
+栈内存保存：会重新在栈中开辟一个内存空间，用于保存原值的副本，之后新旧对象*彼此相互独立，互不影响
+
+堆内存保存：只会复制一个指向原对象的指针，此时新旧对象仍然指向同一个堆内存中的对象，*彼此并不独立，会相互影响
+
+
+## 用const和let 对基本数据类型和引用数据类型重复赋值会有不同
+
+###重复赋值
+1.对基本类型：
+const 定义的是常量，基本类型不可以重复赋值
+let 定义变量，基本类型可以重复赋值，可覆盖
+
+2.对引用类型：
+
+    const person = new Object();
+    person.name="pjw";
+    console.log(person.name) // pjw
+    person.name="lyq"
+    console.log(person.name) //lyq
+
+    let dog = new Object();
+    dog.name="keji";
+    console.log(dog.name) //keji
+    dog.name="jinmao";
+    console.log(dog.name) //jinmao
+
+当定义引用类型值的时候：
+*const 定义的也能被重复赋值，因为const定义对象的时候，实际上是定义了一个指向原对象的指针，改变值时，这个指向对象的指针是
+不会变的，（可以把此指针对象看成一个常量？），但堆内存中数据本身的大小和属性是可变的，所以const定义的引用类型，其属性是可变的。
+
+
+###复制赋值
+
+    let dog2=dog;
+    console.log(dog2.name)  //jinmao   复制原变量，指向同一个堆内存对象
+
+
+    dog2.name="hashiqi";
+    console.log(dog2.name); //hashiqi
+    console.log(dog.name)   //hashiqi   由于堆内存变量复制后指针仍指向同一个对象， 所以新变量复制也会影响到旧变量
+
+
+
+##函数传参
+        function getInfo(member,year){
+            member.name="css";
+            year="1998";
+            /* member=new Object()
+            member.name="pjw" */
+        }
+
+        var person={name:"html"};
+        var birthYear="1997";
+        getInfo(person,birthYear)
+
+        console.log(person,birthYear) // CSS,1997
+
+    *传递参数，是一个复制值的过程
+    都是用var定义(其实都一样，都是全局变量嘛, const也一样，都是要复制的，不是重复赋值)
+    person类型是一个Object对象，是一个引用数据类型，复制进去相当于只是复制指针，仍指向同一个对象，
+    所以函数里面改变person属性会影响到函数外，所以person输出{name:CSS}
+    而birthYear是一个基本类型的值，保存在栈中，复制进去函数就相当于又创建了一个副本，跟原对象互不影响，所以会输出1997
+
+    而当在函数内部重新创建一个新的member对象，这个对象相当于一个局部对象，会在函数执行完就销毁，不会影响外部的输出形成

@@ -1,0 +1,52 @@
+# 缓冲运动完美框架 （解决了位置不精准，多个timer取消，到达抖动的问题） 任意值框架
+    function softMove(obj,attr,iTarget){
+                clearInterval(obj.timer);
+                obj.timer=setInterval(function(){
+                    var sty=parseInt(getStyle(obj,attr));
+                    var speed=(iTarget-sty)/6;
+                    speed=speed>0?Math.ceil(speed):Math.floor(speed);
+
+                    if(iTarget==sty){
+                        clearInterval(obj.timer);
+                    }
+                    else{
+                        obj.style[attr]=sty+speed+'px';
+                    }
+
+                },30)
+            }
+    //取非行间样式
+    function getStyle(obj,name){
+                if(obj.currentStyle){
+                    return obj.currentStyle[name];
+                }
+                else{
+                    return getComputedStyle(obj,false)[name];
+                }
+            }
+
+# 匀速运动完美框架 
+
+    function keepMove(iTarget){
+            var timer=null;
+            var oDiv=document.getElementById("div3");
+            clearInterval(timer);
+            timer=setInterval(function(){
+
+                //匀速运动就多一步，要进行速度正负设置（缓冲的直接减法做了判断）
+                if(iTarget-oDiv.offsetLeft<0){
+                    speed=-9;
+                }
+                else{
+                    speed=9;
+                }
+
+                if(Math.abs(iTarget-oDiv.offsetLeft)<9){
+                    oDiv.style.left=iTarget+'px';
+                    clearInterval(timer);
+                }
+                else{
+                    oDiv.style.left=oDiv.offsetLeft+speed+'px';
+                }
+            },30)
+        }

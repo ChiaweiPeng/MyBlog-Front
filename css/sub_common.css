@@ -1,0 +1,50 @@
+article .left_main .article_box .sub_title{
+    text-align: center;
+    font-size: 2em;
+    margin-bottom: 30px;
+}
+article .left_main .article_box .sub_title span{
+    color: #0099e0;
+}
+article .left_main .article_box .content_box .Lists .years{
+    font-size: 16px;
+    font-weight: 600;
+    height: 50px;
+    line-height: 50px;
+    border-left: 4px solid rgba(224, 221, 221, 0.5);
+    padding-left: 30px;
+    position: relative;
+}
+article .left_main .article_box .content_box .Lists ul li{
+    font-size: 16px;
+    font-weight: 400;
+    /* height: 50px; */
+    line-height: 50px;
+    border-left: 4px solid rgba(224, 221, 221, 0.5);
+    padding-left: 30px;
+    position: relative;
+}
+article .left_main .article_box .content_box .Lists i{
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: rgb(86, 86, 247);
+    display: inline-block;
+    position: absolute;
+    left: -6px;
+    top: 22px;
+}
+article .left_main .article_box .content_box .Lists ul li .time{
+    margin-right: 26px;
+    font-weight: 500;
+    color:var(--color-gray-500) ;
+}
+article .left_main .article_box .content_box .Lists ul li i:hover{
+    background: rgb(250, 114, 114);
+}
+article .left_main .article_box .content_box .Lists ul li .boxs{
+    display:none;
+    background: rgba(224, 221, 221, 0.3);
+    width: 500px;
+    height: 500px;
+}

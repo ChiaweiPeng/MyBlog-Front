@@ -1,0 +1,119 @@
+# 性能优化
+
+###法一：减少DOM访问次数，尽量使用JS处理
+如，想在页面DIV上循环打印
+
+        for (var i = 1; i < 100; i++) {
+            document.getElementById("div").innerHTML += '' + i;
+        }
+        这里，每次循环都要访问一次DOM，100次就要访问100次的DOM，如果改成：
+
+        var str = '';
+        for (var i = 1; i < 100; i++) {
+            str += '' + i;
+        }
+        document.getElementById("div").innerHTML = str;
+        改成先定义一个字符串，再将它传入，这样，就只访问了一次DOM，字符串的累积完全可以在JS中做
+
+
+###法二：使用局部变量保存DOM的引用
+        如：每次点击按钮p1的数字加1
+        function bindActions() {
+            document.getElementById("button").onclick = function () {
+                document.getElementById("p1").innerHTML = parseInt(document.getElementById("p1").innerHTML) + 1
+            }
+        }
+        这样每次点击按钮都要访问三次DOM
+        function bindActions() {
+            var myBtn = document.getElementById("button");
+            var p1 = document.getElementById("p1");
+            myBtn.onclick = function () {
+                p1.innerHTML = parseInt(p1.innerHTML) + 1;
+            }
+        }
+        将每个DOM引用保存到局部变量，可以减少执行时再引用多次DOM
+
+###法三：为HTML集合做缓存
+
+ 常见的HTML集合有
+     document.getElementsByTagName
+     document.getElementsByName
+     document.getElementsByClassName
+     document.links
+     document.images
+     document.forms
+     这些都是返回HTML集合的属性，HTML集合是一个类数组对象，拥有与数组类似的length属性，也能使用数组下标来获取元素。
+
+
+使用HTML集合的时候应尽量将其缓存，如使用循环语句时也要将length缓存（访问HTML的length属性比访问数组的length属性要慢得多）
+
+        var myDivs = document.getElementsByTagName("myDiv");
+        for (var i = 0; i < myDivs.length; i++) {
+
+        }
+        这样每次循环都要去取一次myDivs集合的长度
+
+        for (var i = 0, *len = myDivs.length; i < len; i++) {
+
+        }
+        而如果换成这个将长度缓存起来，每次循环就不用再去取整个myDivs了
+        
+       另外HTML是具有实时性的，即它会与文档一直保持着联系，每次使用集合的时候，里面的数据都是最新的
+        var divs=document.getElementsByTagName("div");
+        console.log(divs.length)  //3
+        document.body.appendChild(document.createElement("div"));
+        console.log(divs.length)  //4,数据始终是最新的
+
+       每次访问集合的时候都会重新启动查询DOM的操作来更新集合的数据
+       如果要使用HTML集合的操作多且频繁，可以将集合内的元素全部复制到数组中，数组的速度要比HTML集合的速度
+       快得多。
+
+    
+  ###法四：使用querySelector()和querySelectorAll() 代替，简单又能节省性能
+
+
+  ##五 避免重排重绘
+####1.什么是重排（回流）：
+假如DOM产生了几何变化，那么与之对应的渲染树中的节点部分以及受到影响的部分都会失效，然后进行重新构建渲染树，这个就是重排的过程
+#####个人认为：重排就是重新排列页面元素的大小和布局
+
+ ####2.什么是重绘：
+在重排之后浏览器会重新绘制被影响至失效的部分，这个过程就是重绘
+######重绘就是将重排后的页面重新渲染
+
+###只要不对页面布局以及几何属性做出修改就不会引发重排，例如*只改变颜色不需要重排，只会发生重绘。
+
+####核心，还是要减少DOM的操作
+####具体的操作可以有：
+1.将元素先隐藏，更新完毕后再显示出来
+如：常见的列表按条件排序 批量增加或删除纵列，先将其隐藏，排序结束后再放出，会比直接操纵列表省去很多重排
+
+2.*利用文档片段createDocumentFragment()来批量更新节点，加入片段仓库，操作完毕后再一并插入到元素中；
+可以只触发一次重排只访问一次DOM
+
+3.为需要修改的元素做一个备份，操作副本，再将副本和原元素进行替换，即cloneNode，再修改clone的，
+ 最后再replaceChild即可
+
+
+###六 使用事件委托
+大量的事件绑定会让浏览器耗费大量的资源跟踪事件处理器
+父元素可以通过冒泡接收到其下所有子元素的事件，所以我们可以把多数的事件绑定在父元素上
+通过筛选需要触发的元素来触发事件，可以通过*event.target来确定需要真正触发事件的元素
+
+###七 使用函数节流
+DOM操作比起非DOM交互需要更多的内存和CPU时间。连续进行过多的DOM相关操作可能会导致浏览器挂起，有时甚至崩溃。
+如在onresize事件处理程序中进行DOM操作，其高频率的更改可能使浏览器崩溃
+
+######函数节流： 某些代码不可以在没有间断的情况下连续重复执行。
+第一次调用函数，创建一个定时器，在指定的时间间隔之后运行代码。
+第二次调用函数时，它会清除前一次的定时器并设置另一个。
+目的是只有在执行函数的请求停止一段时间后才执行
+
+    可以用throttle()函数来简化，这个函数可以自动进行定时器的设置和清除
+    接收两个参数：要执行的函数   及 在哪个作用域中执行
+        function throttle(method,context){
+            clearTimeout(method.tId);
+            method.tId=setTimeout(function(){
+                method.call(context)    // 使用call来指定作用域，如果没传第二个参数即默认全局作用域
+            },100)
+        }

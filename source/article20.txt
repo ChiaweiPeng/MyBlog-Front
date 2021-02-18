@@ -1,0 +1,89 @@
+# Vuex总结
+
+大型项目中，vue只能承担视图层的内容
+当涉及大量数据传递的时候，需要有一个数据框架进行辅助，即Vuex
+Vuex是一个实现数据共享的一个插件
+
+把一些数据放到一个公共的存储空间去存储，某个组件改变了这个公共的数据其他的组件就能感知到
+
+state : 存放公用的数据，如果组件想使用公用的数据，直接调state即可
+
+当组件想要改变state里的数据的时候，不能直接去改变state里的数据
+必须先 调用 Actions  然后调用 Mutations  最后再去修改 state数据
+
+如果有一些异步操作，或者是批量的同步操作，要先放在Actions里，然后再去调用mutations，mutations放的是一个个同步的数据修改
+
+只有通过Mutations才能修改state数据
+
+可以跳过Actions
+
+当组件去调用Actions时通过 Dispatch方法
+组件去调用Mutations 或者 Actions去调用Mutations 时通过 Commit 方法
+
+
+使用：
+1. 在src上创建一个store文件夹，store下创建一个index.js
+
+2.index.js上 引用并启用Vuex插件
+
+            import Vue from 'vue'
+            import Vuex from 'vuex'
+            Vue.use(Vuex)
+        
+3.再创建一个Store仓库，里面存放共用数据，并导出去
+
+        export default new Vuex.Store({
+            state: {
+                city: '北京'
+            }
+        })
+
+ 4.然后在main.js上 
+
+        import store from './store'
+        并在根实例上引入
+        store
+        之后便可以在每一个组件上都使用 this.$store获取到仓库    
+
+5.更改仓库值，就必须通过Actions或者Mutations
+   1.在methods创建一个点击事件，在把要传递的参数传进来
+
+          @click="handleClick(item.name)"
+
+          methods:{
+              handleClick(city){
+
+              }
+          }
+          
+          通过 dispatch 向Actions发送函数和参数
+          this.$store.dispatch('cityChange(方法名)',city(传递的参数))
+
+          或者直接通过 commit 向 Mutations 发送函数和参数
+          this.$store.commit('cityChange',city)
+          
+  2.仓库中在actions:{}下可以执行这个函数
+            actions里的函数接收两个参数，第一个是上下文，为了调用之后的commit；第二个是传进的参数、
+
+           actions: {
+               cityChange (ctx, city){
+                   ctx.commit('cityChange', city)
+               }
+           }
+        
+  3.之后在 mutations中便可以真正对仓库数据进行修改
+             mutation里的函数也接受两个参数，第一个是state，第二个是传进的参数
+
+           mutations: {
+               cityChange (state, city) {
+                   state.city = city
+               }
+           }
+        
+
+ 6.如果不是复杂的数据或异步操作，就可以省略Actions的调用，直接调用commit 调用Mutations
+
+
+ 7.取到想要的城市之后，就要跳回到首页 可以使用router.push跳转
+ this.$router.push('/')
+        

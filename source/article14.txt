@@ -1,0 +1,74 @@
+ # 闭包 
+
+闭包的官方定义：指的是词法表示，包括不被计算的变量 的函数
+1.闭包是一个函数
+2.闭包可以使用在它外面定义的变量
+3.闭包存在定义该变量的作用域中
+
+## 例子1：
+    var func=function(){
+        var a="pjw";
+        var func1=function(){
+            a +=' a';
+            console.log(a)
+        }
+
+            return func1
+    }
+
+    var func2=func();
+    func2()    // pjw a
+    func2()    // pjw a a
+    func2()    // pjw a a a
+
+    可见外层函数的a一直没被销毁。因为func1 形成了一个闭包，导致a的生命周期延续了
+
+    1.闭包是一个函数，如func1；
+    2.闭包调用其他函数的变量，使其不被销毁，如func1调用了a
+    3.闭包存在定义该变量的作用域中，变量a存在func的作用域中，则func1也必然存在这个作用域中 
+
+## 例子2：
+    for(var i=0;i<5;i++){
+        setTimeout(function(){
+            console.log(i)
+        })
+    }
+    打印5个5：setTimeout函数是异步的，等到该函数执行时，for循环已经结束了，此时i的值为5，
+    所以function(){cosole.log}去找i变量时，取到的都是5
+
+
+    for(var j=0;j<5;j++){
+        (function(e){
+            setTimeout(function(){
+                console.log(e)
+            })
+        })(j)
+    }
+
+    打印逐个值
+    当 j=0 传进匿名函数function(e){}时，此时此匿名函数中的i即为传进来的参数0，当setTimeout顺着外层去找i时，
+    便在这个匿名函数中找到了，所以就能拿到一个个的值
+
+## 闭包的缺点：
+1.在闭包中调用局部变量，会导致这个变量无法及时被销毁，就如同成为全局变量一样。
+  如果需要回收这些变量，可以手动将变量设为null
+
+
+2.在闭包使用过程中，比较容易形成的是js对象和DOM对象的循环引用，可能会造成*内存泄漏。
+  这是因为浏览器的垃圾回收机制中，如果两个对象之间形成了循环引用，那么它们都无法被回收。
+
+    window.onload = function () {
+        function func() {
+            var test = document.getElementById("test");
+            test.onclick = function () {
+                console.log('hello world')
+            }
+        }
+        
+        func();
+        console.log(test)
+    }
+
+func函数中用匿名函数创建了一个闭包。变量test是JS对象，引用了id为test的DOM对象；
+DOM对象的onclick属性又引用了闭包，闭包又可以调用test，因此形成了循环引用，导致两个对象无法被回收。
+解决此问题，可以把循环引用中的对象test设为null

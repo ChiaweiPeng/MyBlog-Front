@@ -1,0 +1,135 @@
+# 原型与原型链
+
+###1.原型：
+JS中，规定，每个函数都有一个prototype对象属性，指向另一个对象（原型链上面的）。
+prototype上的属性和方法，都会被构造函数构造出来的实例所继承。
+prototype就是调用构造函数所创建出来的实例对象的原型(__proto__)
+
+######prototype可以让所有对象共享它所包含的属性和方法。也就是说，不必在构造函数中定义对象信息，可以直接将它们添加到原型上。
+
+#####几组重要的指向关系：
+        1.构造函数中有prototype 指向 该构造函数的原型对象；
+
+        2.原型对象中有constructor 指向 该原型对象的构造函数；
+
+        3.构造函数创建的实例对象中有__proto__ 指向 构造函数的原型对象；
+
+        4.原型对象中也有__proto__ 指向 它的构造函数上一层的原型对象；
+
+        可以看到 原型对象和实例对象 这两个对象，都有[[prototype]](即__proto__)内部属性，都指向原型对象。
+
+
+
+###2.原型链：
+#####由上，通过 __proto__ 串联起来的实例对象与各个原型对象之间的连接，就是原型链。
+        
+      1.每个对象都有会有__proto__属性，原型链上的对象正是通过这个属性连结在一起的；
+
+      2.作为一个对象，当你去访问它的一个属性或者方法时，先会在这个对象里面查找是否有该属性或方法，
+        如果没，则JS引擎将访问这个对象的__proto__属性指向的上一个对象，如果还没有
+        则又继续往这个对象的 __proto__上找，直到这个链表结束。
+
+###练习一：
+
+        function Person() {
+
+        }
+        Person.prototype.name = "aaa";
+
+        var person1 = new Person();
+
+        console.log(person1.__proto__);       // 指向Person.prototype
+        console.log(person1.constructor);     // 指向Person构造函数
+        console.log(Person.prototype);         // 即Person.prototype
+        console.log(Person.prototype.constructor)   // 指向Person构造函数
+        console.log(person1.__proto__.constructor)  // 指向Person构造函数
+        console.log(Person.__proto__)               // 为空，构造函数只有prototype属性
+
+###练习二：
+        function A() {
+
+        };
+
+        function B(a) {
+            this.a = a;
+        };
+
+        function C(a) {
+            if (a) {
+                this.a = a;
+            }
+        }
+        A.prototype.a = 1;
+        B.prototype.a = 1;
+        C.prototype.a = 1; 
+
+        console.log(new A().a)      // 1
+
+        console.log(new B().a)      // undefined
+        new B().a 相当于
+        var b=new B();    console.log(b.a)
+        由于构造函数B需要传入参数a才能有值，而此时创建实例时并没有给a赋值，所以将打印undefined
+        为什么没到原型上找a，是因为在本身能找到声明的一个a，只是这个a值是undefined;
+
+        console.log(new C(2).a)    // 2
+        这个就是上面的那个传入了参数，所以将取到这个参数a
+
+        console.log(new C().a)    // 1
+        由于C函数，先进行了if判断，如果没传进来a，即a的值为undefined，则不会去声明a，自然也就不能在自己身上找到a；
+        只能去原型取a，则a=1
+
+
+###练习三：
+       function Fun(){
+            var getName=function(){
+                console.log(1);
+            }
+            return this;                    
+        }
+        构造函数中 再用var 声明的函数，并不是Fun()的方法，只有通过this.声明的方法才能继承到实例对象中
+        由于该构造函数return this，而这里的this指向的是window,所以这里使用 Fun() 就相当于window.
+
+        Fun.getName=function(){
+            console.log(2)
+        };
+        这样子定义的 只能通过Fun.getName()调用，才打印2，并且不会去到实例上
+
+        Fun.prototype.getName=function(){
+            console.log(3)
+        };
+        这个是在原型上的方法
+
+        
+        下面两个其实都是在全局对象上定义的两个普通的函数
+        var getName = function(){
+            console.log(4)
+        };
+        
+
+        function getName(){
+            console.log(5)
+        };
+
+
+
+        Fun().getName();     // 4
+        Fun()函数，注意，函数的返回值永远是return，所以Fun()返回的是this
+        所以这句相当于调用 this.getName() 即 window.getName() 即直接调用getName()，输出4
+
+        getName()           // 4
+        
+        new Fun().getName()     // 3
+        getName在Fun函数里，是通过var声明的而不是通过this.来当作Fun()的属性
+        所以getName并不是Fun()的一个方法。
+        new Fun相当于创建一个实例，实例上没有getName方法，所以会去原型上找，找到输出3
+
+        // var f=new Fun();
+        // f.getName()
+
+
+        Fun.getName()               // 2
+
+        new new Fun().getName()        // 3
+        new 后面一定跟的是函数，用来创建实例对象，所以new Fun()要是一体的。
+        new Fun()相当于实例出了一个对象，然后该对象再去调用getName方法，所以 new Fun().getName() 是一起的
+        所以其实是跟上面一样，输出原型上的方法，3

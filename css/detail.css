@@ -1,0 +1,32 @@
+.left_main .article.article_box {
+     padding: 30px 20px; 
+}
+article .article .title h1{
+    font-size: 35px;
+    font-weight: bolder;
+}
+article .article .title{
+    text-align: center;
+}
+article .article .sub_info{
+    margin-top: 15px;
+    margin-bottom: 40px;
+    font-size: 16px;
+    font-weight: 400;
+    text-align: center;
+}
+article .article .sub_info p{
+    display: inline;
+    color:  #0099e0;
+}
+article .article .sub_info .dots{
+    font-weight: bolder;
+    margin: 0 3px;
+}
+article .article .sub_info p i{
+    margin-right: 5px;
+}
+article .article .sub_info .biaoqian:hover{
+    cursor: default;
+    text-decoration: underline;
+}

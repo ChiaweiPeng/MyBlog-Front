@@ -1,0 +1,32 @@
+# transition 动画过渡
+
+## transition-property   可以定制哪些属性有过渡
+transition-property : width,background / all 所有都有过渡 / none 所有都无过渡
+
+
+## transition-duration: 2s  定制的属性过渡时间
+也可以加多个值：transition-duration:200ms,3s,2s
+对应相应的property,如果设置的时间个数不够property的个数，就从头开始再来
+
+
+## 可以给transition添加回调函数,transition过渡结束时调用
+document.querySelector('div').addEventListener('transitioned',function(){
+    ...
+})
+
+
+## transition-timing-function 调节动画的运动节奏
+默认：ease 缓动
+linear: 匀速
+还可以通过cubic-bezier调到具体的节奏
+
+transition-timing-function：steps(3,start) 将产生3帧的帧动画
+steps(帧数,start/end) 步径，可以用来设置帧动画
+
+
+## transition-delay  设置延迟时间
+transition-delay:2s
+
+
+## 实例练习：
+1.旋转出现圆形导航

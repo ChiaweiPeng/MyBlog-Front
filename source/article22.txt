@@ -1,0 +1,186 @@
+# ES6异步编程与Promise
+
+
+## 异步编程总结
+
+## 并发和并行的区别
+1.并发是宏观概念，我分别有任务 A 和任务 B，在一段时间内通过任务间的切换完成了这两个任务，这种情况就可以称之为并发。
+
+2.并行是微观概念，假设 CPU 中存在两个核心，那么我就可以同时完成任务 A、B。同时完成多个任务的情况就可以称之为并行。
+
+## 什么是回调函数
+1.以下即是一个回调函数例子
+
+    ajax(url, () => {
+        // 处理逻辑
+    })
+
+2.回调函数的缺点是容易写出回调地狱
+
+    ajax(url, () => {
+        // 处理逻辑
+        ajax(url1, () => {
+            // 处理逻辑
+            ajax(url2, () => {
+                // 处理逻辑
+            })
+        })
+    })
+
+3.回调地狱的根本问题是：
+    1.嵌套函数存在耦合性，一旦有所改动，就会牵一发而动全身
+    2.嵌套函数一多，就很难处理错误
+
+
+
+# Promise
+
+## Promise是一个对象，是用来处理异步操作的，可以避免多次异步操作导致的回调地狱问题
+
+### Promise有三种状态:pending(进行中) resolved(完成) rejected(失败)
+只有异步返回的结构可以改变其状态。所以，promise的过程一般只有两种：pending->resolved或者pending->rejected。
+
+
+#### promise对象还有一个比较常用的then方法，用来执行回调函数，then方法接受两个参数，第一个是成功的resolved的回调，另一个是失败rejected的回调，第二个失败的回调参数可选。
+   并且then方法里也可以返回promise对象，这样就可以链式调用了。
+
+##
+Promise.all() // 所有的都有完成，相当于 且
+Promise.race() // 完成一个即可，相当于 或
+
+## 例子
+promise 承诺
+清除异步操作，用同步一样的方式，来书写异步代码
+
+resolve ： 解决了
+reject ：  拒绝了
+
+       使用promise也要像构造函数一样的new 出来
+        let p = new Promise(function(resolve,reject){
+            $.ajax({
+                url:'arr.txt',
+                dataType:'json',
+                success(res){
+                    resolve(res)
+                },
+                error (err) {
+                    reject(err)
+                }
+            })
+        })
+
+        p.then(function(res){
+            alert('成功了'+ res)
+        },function(err){
+            alert('失败了')
+        })
+     then 的第一个函数就是调用的resolve 第二个就是reject
+
+
+## Promise.all
+当我定义了多个promise 如果每一个都要搭配一个.then 就太麻烦了
+promise.all 可以批量处理promise对象
+此时then若成功将取到一个res数组，存放所有promise对象的数据
+        
+        let p1 = new Promise(function(resolve,reject){
+            $.ajax({
+                url:'arr.txt',
+                dataType:'json',
+                success(res){
+                    resolve(res)
+                },
+                error (err) {
+                    reject(err)
+                }
+            })
+        })
+
+        let p2 = new Promise(function(resolve,reject){
+            $.ajax({
+                url:'data.json',
+                dataType:'json',
+                success(res){
+                    resolve(res)
+                },
+                error (err) {
+                    reject(err)
+                }
+            })
+        })
+
+        Promise.all([
+            p1,p2
+        ]).then(function(res){
+            let [arr1,arr2] = res
+            console.log(res)
+            alert(arr1)
+            alert(arr2)
+            alert('成功了')
+        },function(err){
+            console.log(err)
+            alert('至少有一个失败了')
+        })
+
+
+## Promise封装
+每一个url创建一个promise太麻烦，封装一个创建函数，传入url
+注意要把创建的promise return出去
+
+最后通过 promise.all 进行调用创建函数，即可拿到全部数据
+注意 promise.all和.then 的调用要在 createPromise 代码块外面
+
+
+        function createPromise(url){
+            return new Promise(function(resolve,reject){
+                $.ajax({
+                    url:url,
+                    dataType:'json',
+                    success (res) {
+                        resolve(res)
+                    },
+                    error (err) {
+                        reject(err)
+                    }
+                })
+            })
+        }
+
+        Promise.all([
+            createPromise('arr.txt'),
+            createPromise('data.json')
+        ])
+        .then(function(res){
+            console.log(res)
+            alert('都成功了')
+        },function(err){
+            alert('至少一个失败了')
+        })
+
+
+## async与await
+Promise.all 只能无脑地全部读取，有一个不能获取就会报错
+
+async 实际是一个语法糖，是一个函数的状态
+声明该函数之中是包含异步操作的
+
+普通函数： 一直执行，直到结束
+async函数：  能够"暂停"，能根据await位置，将代码分为几个小块
+异步的操作，同步的写法
+
+await 语句如果执行失败不会报错，最好加一个try...catch包住
+
+        async function show () {
+            let a =12
+            let b = 24
+
+            try{
+                let data = await $.ajax({url:'arr.txt',dataType:'json'})
+
+                alert(a+b+data)
+            }catch(e){
+                console.log('获取失败')
+            }
+           
+        }
+
+        show()

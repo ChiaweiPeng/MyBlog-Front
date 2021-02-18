@@ -1,0 +1,127 @@
+#  Grid栅格布局总结
+
+## 对比flex
+
+    Flex:一维布局，轴线布局，只能针对项目对于轴线的位置；
+    Grid:二维布局，网格布局，将容器划分为行和列，产生单元格，再指定项目所在的单元格
+
+## 常用属性总结
+    注意：项目只能是容器的顶层元素，不包括项目子元素
+
+### 容器属性
+1.grid-template-rows/columns  ： 划分容器有几行几列
+ 关键字：
+ a.repeat(2,1fr) 设置重复值 ：repeat（重复次数，每个的宽度）
+  
+ b.auto-fill 自动填充  ： repeat(auto-fill,100px) 每个100px,自动填充满容器
+ 
+ c.fr : 表比例  可以与绝对长度混用如：  ~~rows: 150px 1fr 1fr 
+ 
+ d.minmax() : 产生长度范围，接收的最大最小值
+
+ e.简写：grid-template: rows / columns
+
+
+2.row/column-gap : 设置行，列间隔 
+    grid-gap:<row-gap> <column-gap> : 简写
+
+
+3.grid-template-areas : 定义区域
+给划分出来的每一个单元格给到名称，再在下面的用一个实际div去指明这个区域
+
+例如，移动端导航页: 
+grid-template-areas:"header header"
+                   "nav main"
+                    "footer footer"
+
+div.header{
+    grid-area:header;  // grid-area 项目属性，指明项目位置，这样就能打通上部两个设为header的单元格
+}          
+
+注意：比较理想的使用：若划分的栅格恰巧够分各自区域，不需要打通，就用"."占位，需要打通的再用取一个名称
+
+
+4.grid-auto-flow : row 设置放置顺序, 默认row 先行后列
+row/column dense ：表示先排列，并尽量填满空格
+
+
+5.justify/align-items : 单元格内部的水平，垂直居中
+简写：place-items:<align-items> <justify-items> 先列后行喔
+
+
+6. justify/align-content: 整个内容区域的水平，垂直居中
+简写：place-content 
+
+
+7.grid-auto-columns/rows : 设置在网格外部的项目单元格的行，列宽
+有时项目会撑过设定的网格，这时这些项目会压缩，设置这个值后可以指定这些元素不压缩
+
+
+
+
+### 项目属性
+项目属性，就主要用来指明单元格具体在网格中的什么位置
+
+1.grid-column/row-start/end : 具体指明单元格 开始线，结束线
+
+
+
+2.grid-column/row : 上面的简写
+推荐的用法：
+grid-column:1 / 3;
+grid-row: 1/ 3    // 直接指定从第一根线开始，第三根线结束
+
+grid-column: 1 / span 2    // span ,表示跨越几条线
+
+
+
+3.grid-area : 直接指定项目位置
+<row-start>/<column-start>/<row-end>/<column-end>
+
+grid-area:1/1/3/3  
+
+
+
+4. justify/align-self ：设置单元格里内容的水平，垂直排列
+简写: place-self: <align-self> <justify-self>    // 可以看到grid的简写的，都是列在前，行在后的
+
+
+
+
+
+## 注意的用法：
+1.设了栅格后，一定要给点内容，写个aaa什么的，不认就不会显示栅格了;
+
+2.grid布局似乎不好处理单元格内部元素内容的居中
+
+3.grid设定区域的宽度好像有些死板，比如直接设置12,1fr的列，但是如果有些列我就想让它长一些，就只能又提出来设置
+
+
+
+## Flex与Grid布局混合使用的总结（真的舒服）（这部分建议回看Grid布局/zhifubao.html）
+
+1.用flex和grid结合。大面积使用grid的话感觉更不好控制，flex可能更好操作一点，兼容性也比较好。
+一些很明显栅格的地方用上grid就很舒服，内部的内容用flex居中别用grid的居中，就可以解决不充满的问题了。
+
+
+2.使用grid的话，好像一开始就设定好各自的宽度更不好控制，万一中间有要不同宽度的，就要重新动。
+所以感觉可以做一个部分给一个宽度，做一个部分给一个宽度好像比较好掌控。
+
+
+3.要想单元格内的内容自然撑满整个单元格 ：
+不要在容器中设置水平，垂直居中，直接在单元格内设置flex，让flex去处理居中，就能完美撑满了
+如处理常见移动端app展示格：
+
+        .apps{
+        display:grid;
+        grid-template-columns:repeat(3,1fr);
+        height:80%  // 这里不给个高度好像撑不开
+         }
+
+        .apps span{
+        display:flex; // 在单元格设置flex，用flex处理居中
+        flex-direction:column;
+        justify-content:center;
+        align-items:center;
+        }
+
