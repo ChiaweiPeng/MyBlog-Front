@@ -255,4 +255,62 @@ $(function () {
     }
 
 
+    // 双击导航栏头像弹出登录窗口
+    var $loginArea = $(`
+    <div class="login_area" style="display:none">
+        <div class="login_contain">
+            <input type="text" class="username" placeholder="请输入您的用户名">
+            <input type="password" class="password" placeholder="请输入您的密码">
+            <div class="btn">
+                <button id="btn-login">登录</button>
+            </div>
+            <span id="login-close"><i class="iconfont icon-cha"></i></span>
+        </div>
+    </div>
+    `) 
+
+    $('header').append($loginArea)
+
+
+    var $login = $(".touxiang")
+    
+    $login.dblclick( () => {
+        $loginArea.fadeIn()
+        return
+    })
+
+    $('header').delegate('#login-close', 'click', ()=>{
+        $loginArea.fadeOut()
+    })
+
+    // 发送post请求
+    function post(url,data = {}) {
+        return $.ajax({
+            type:'post',
+            url,
+            data: JSON.stringify(data),
+            contentType: 'application/json'
+        })
+    }
+
+    $('header').delegate('#btn-login', 'click', ()=>{
+        const username = $('.username').val()
+        const password = $('.password').val()
+        const url = '/api/user/login'
+        const data = {
+            username,
+            password
+        }
+
+        post(url, data).then( res => {
+            if(res.errno != 0) {
+                // 登录失败
+                alert(res.message)
+            } else {
+                // 登录成功，跳转后台
+                alert(res.message)
+                location.href = '../fenlei.html'
+            }
+        })
+    })
 })

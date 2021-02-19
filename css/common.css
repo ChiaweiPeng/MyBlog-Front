@@ -307,6 +307,71 @@ header .header_banner .header_banner_arrow{
     animation-duration: 2s;
     animation-iteration-count: infinite;
 }
+
+/* 登录 */
+header .login_area{
+    background: rgba(51, 51, 51, 0.5);
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+}
+
+header .login_area .login_contain{
+    width: 700px;
+    height: 150px;
+    padding: 40px;
+    background: #fff;
+    border-radius: 5px;
+    text-align: center;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 100px;
+    margin: 0 auto;
+}
+
+header .login_area input{
+    width: 55%;
+    height: 29px;
+    border-radius: 15px;
+    border: 2px solid lightblue;
+    text-indent: 10px;
+    outline: none;
+    margin-bottom: 20px;
+}
+header .login_area button{
+    width: 100px;
+    height: 33px;
+    border-radius: 10px;
+    background: #0099e0;
+    border: none;
+    outline: none;
+    color: #fff;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+}
+header .login_area span{
+    height: 16px;
+    line-height: 16px;
+    display: inline-block;
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    cursor: pointer;
+    color: #0099e0;
+    opacity: 0.5;
+    transform: rotate(0deg);
+    transition-duration: .5s;
+}
+header .login_area span:hover{
+    opacity: 1;
+    transform: rotate(90deg);
+}
+
 /* 加animation动画 */
 @keyframes arrow {
     50% {
