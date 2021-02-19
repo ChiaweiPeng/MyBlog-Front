@@ -309,7 +309,8 @@ $(function () {
             } else {
                 // 登录成功，跳转后台
                 alert(res.message)
-                location.href = '../fenlei.html'
+                window.open('/admin/admin.html')
+                location.href = '/'
             }
         })
     })

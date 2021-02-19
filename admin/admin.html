@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <title>博客后台</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        html {
+            height: 100%;
+        }
+
+        body {
+            padding: 0;
+            margin: 0;
+            overflow: hidden;
+            height: 100%;
+        }
+
+        header {
+            padding: 0 50px;
+            height: 10%;
+            line-height: 65px;
+            background: #001529;
+            font-size: 36px;
+            color: #fff;
+        }
+
+        article {
+            height: 90%;
+        }
+
+        .row {
+            margin: 0;
+        }
+
+        .side-nav {
+            height: 100%;
+            padding: 0;
+        }
+
+        .nav>li {
+            text-indent: 25px;
+
+        }
+
+        .nav>li>a {
+            color: rgba(0, 0, 0, 0.65);
+        }
+
+        .nav>li>a>.glyphicon {
+            margin-right: 5px;
+        }
+
+        .nav>li.active>a {
+            color: #1890ff;
+            background: #e6f7ff;
+        }
+
+        .right-area {
+            height: 100%;
+            overflow: hidden;
+            padding: 8px 30px 30px 30px;
+            background: #f0f2f5;
+        }
+
+        .right-area .right-nav {
+            font-size: 13px;
+            color: #999;
+            margin-bottom: 5px;
+            padding-left: 5px;
+        }
+
+        .right-area .right-nav .small-nav {
+            color: #75b3ec;
+        }
+
+        .right-content {
+            background: #fff;
+            padding: 20px 20px;
+            height: 100%;
+            overflow: auto;
+        }
+
+        .list-content table {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .list-content table th,
+        td {
+            border: 1px solid #ddd;
+            text-align: center;
+            height: 80px;
+        }
+
+        .list-content table tr:hover {
+            background: #eee;
+        }
+
+        .right-content .content {
+            display: none;
+        }
+
+        .right-content .active {
+            display: block;
+        }
+
+        .right-content .new-blog .sub {
+            font-weight: 600;
+        }
+
+        .right-content .new-blog .blog-title,.blog-subtitle {
+            width: 55%;
+            height: 30px;
+            border-radius: 5px;
+            border: 1px solid #75b3ec;
+            text-indent: 10px;
+            outline: none;
+            margin-bottom: 20px;
+        }
+
+        .right-content .new-blog .type{
+            vertical-align: middle;
+        }
+
+        .right-content .new-blog .type #type-sel{
+            width: 15%;
+            padding: 3px 3px;
+            font-size: 16px;
+            border: 1px solid #75b3ec;
+            border-radius: 5px;
+            outline: none;
+            margin-right: 10px;
+        }
+
+        .right-content .new-blog .blog-type{
+            width: 20%;
+            height: 26px;
+            border-radius: 5px;
+            border: 1px solid #75b3ec;
+            text-indent: 10px;
+            outline: none;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        MyBlog-Admin
+    </header>
+
+    <article class="row">
+        <div class="side-nav col-md-2">
+            <ul class="nav nav-stacked" role="tablist">
+                <li role="presentation" class="active"><a href="#list"><span class="glyphicon glyphicon-tasks"
+                            aria-hidden="true"></span>全部文章</a></li>
+                <li role="presentation"><a href="#newBlog"><span class="glyphicon glyphicon-pencil"
+                            aria-hidden="true"></span>新增文章</a></li>
+                <li role="presentation"><a href="#other"><span class="glyphicon glyphicon-piggy-bank"
+                            aria-hidden="true"></span>其他管理</a></li>
+            </ul>
+        </div>
+
+        <div class="right-area col-md-10">
+            <div class="right-nav">后台管理 > <span class="small-nav">博客列表</span></div>
+            <div class="right-content">
+                <div class="content list-content active">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th width="5%">ID</th>
+                                <th width="35%">博客标题</th>
+                                <th>博客副标题</th>
+                                <th width="15%">创建时间</th>
+                                <th width="15%">操作</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                        </tbody>
+
+                    </table>
+                </div>
+
+                <div class="content new-blog">
+                    <div class="title">
+                        <p class="sub"> <span class="glyphicon glyphicon-star"></span> 文章标题</p>
+                        <input type="text" class="blog-title">
+                    </div>
+
+                    <div class="type">
+                        <p class="sub"> <span class="glyphicon glyphicon-star"></span> 文章类型</p>
+                        请选择主要类型:
+                        <select name="type" id="type-sel">
+                            <option value="Tech">Tech</option>
+                            <option value="Life">Life</option>
+                        </select>
+                        
+                        请填写文章关于:
+                        <input type="text" class="blog-type">
+                    </div>
+
+                    <div class="sub-title">
+                        <p class="sub"> <span class="glyphicon glyphicon-star"></span> 文章副标题</p>
+                        <input type="text" class="blog-subtitle">
+                    </div>
+
+                    <div class="blog-content">
+                        <p class="sub"> <span class="glyphicon glyphicon-star"></span> 文章内容</p>
+                    </div>
+
+                    <div class="btn-area">
+                        <button>发表</button>
+                    </div>
+
+                </div>
+
+                <div class="content other-option">
+                    this is other option
+                </div>
+            </div>
+        </div>
+
+    </article>
+
+
+    <!-- jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边) -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+    <!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"></script>
+    <script src="https://cdn.bootcss.com/moment.js/2.23.0/moment.min.js"></script>
+    <script src="https://cdn.bootcss.com/moment.js/2.23.0/locale/zh-cn.js"></script>
+
+    <script src="./admin.js"></script>
+
+</body>
+
+</html>
