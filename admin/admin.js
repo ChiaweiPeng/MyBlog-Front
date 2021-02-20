@@ -1,8 +1,17 @@
+
+
 $(function () {
+
+
     $('.nav>li').click(function (e) {
         $('.nav>li').removeClass('active')
         $(this).toggleClass('active')
     })
+
+    // 刷新跳转到源页面
+    window.onload = function () {
+        location.hash = ''
+    }
 
     // 根据hash值改变内容区域
     $(window).bind('hashchange', function () {
@@ -18,6 +27,20 @@ $(function () {
             $('.content').removeClass('active')
             $('.new-blog').addClass('active')
             $('.small-nav').html('新建博客')
+
+            // 必须切换页面再插入editor
+            $('#markdown').append($(`
+            <div id="myEditor">
+                <textarea style="display:none;">### Hello Editor.md !</textarea>
+             </div>
+            `))
+
+            var editor = editormd("myEditor", {
+                width:"100%",
+                height:500,
+                emoji:true,
+                path: "../node_modules/editor.md/lib/"  // Autoload modules mode, codemirror, marked... dependents libs path
+            });
         }
         if (params.indexOf('other') > 0) {
             $('.content').removeClass('active')
@@ -98,4 +121,37 @@ $(function () {
             })
         }
     })
+
+    // 新建博客
+    $('#submit').click( function(){
+        const title = $('.new-blog>>.blog-title').val().trim()
+        const $typeSel = $('.new-blog>>#type-sel').val().trim()
+        const type = $typeSel+','+ $('.new-blog>>.blog-type').val().trim()
+        const sub_title = $('.new-blog>>.blog-subtitle').val().trim()
+        const content = $('.editormd-markdown-textarea').val().trim()
+
+        if(title === '' || content === '') {
+            alert('请保证标题和内容不为空哦')
+            return
+        }
+
+        let url = '/api/blog/new'
+        data = {
+            title,
+            content,
+            type,
+            sub_title
+        }
+
+        console.log(data)
+        post(url, data).then( res => {
+            if(res.errno != 0) {
+                alert('数据错误')
+                return
+            }
+            alert('新增博客成功')
+            location.href='/admin/admin.html'
+        })
+    })
+    
 })

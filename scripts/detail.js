@@ -51,9 +51,7 @@ $(function () {
                 <p><span><i class="iconfont icon-biaoqian"></i><a href="javascript:;" class="biaoqian">${data.type}</a></span></p>
             </div>
             <div id="blog_content${data.id}" class="arts">
-                <textarea id="append-test" style="display:none;">
-                ${data.content}
-                </textarea>
+                <textarea id="append-test" style="display:none;">${data.content}</textarea>
             </div>
         `))
         edi(data.id)
@@ -130,6 +128,7 @@ $(function () {
             syncScrolling: "single",
             path: "node_modules/editor.md/lib/",
             toolbar: true,
+            emoji:true,
             onload: function () {
                 this.previewing();
                 var editor = this.editor;
