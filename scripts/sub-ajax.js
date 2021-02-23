@@ -21,7 +21,6 @@ $(function () {
 
     // 拼接url
     let url = '/api/blog/list?type=' + nowType
-    console.log(url)
 
     get(url).then(res => {
         if (res.errno != 0) {
@@ -39,43 +38,6 @@ $(function () {
 
     })
 
-
-    // getAjaxContent(nowType)
-
-    // function getAjaxContent(type) {
-    //     $.ajax({
-    //         url: "./source/blog.json",
-    //         dataType: "json",
-    //         success: function (data) {
-    //             $.each(data, function (index, ele) {
-    //                 if (type == '') {
-    //                     var $item = createItem(index, ele)
-    //                     $(".article_Ul").prepend($item)
-    //                 } else {
-    //                     for (var i in ele) {
-    //                         if (ele[i] == type) {
-    //                             var $item = createItem(index, ele)
-    //                             $(".article_Ul").prepend($item)
-    //                         }
-    //                     }
-    //                 }
-    //             })
-    //         },
-    //         error: function (e) {
-    //             console.log(e)
-    //         }
-    //     })
-    // }
-
-    // function createItem(index, ele) {
-    //     var $item = $(`
-    //     <li class="${index + 1} articlesLists"><i></i><span class="time">${ele.blogtime}</span><a href="">${ele.blogtitle}</a>
-    //     </li>`)
-
-    //     return $item
-    // }
-
-
     // 点击跳转
     $("body").delegate(".articlesLists", "click", function () {
         var blogIndex = parseInt(this.getAttribute('class'))
@@ -92,14 +54,12 @@ $(function () {
         $(this).siblings("i").css("background", "rgb(86, 86, 247)")
     })
 
-
-
     // 归档页计算篇数
     var arts_num = $(".arts_num")
     if (arts_num.length !== 0) {
         setTimeout(function () {
             var artContainer = $(".article_Ul").find(".articlesLists")
-            console.log(artContainer.length)
+            // console.log(artContainer.length)
             arts_num.text(artContainer.length)
         }, 200)
     }

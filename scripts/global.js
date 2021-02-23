@@ -166,6 +166,13 @@ $(function () {
     // 全局搜索
     var $myBtn = $(".search_contain>button")
     var $myInp = $(".search_contain>input")
+
+    $myInp.keydown( function(e) {
+        if( e.keyCode == 13){
+            $myBtn.click()
+        }
+    })
+
     $myBtn.click(function () {
         var $inp = $myInp.val().trim().toLowerCase()
         console.log($inp)
@@ -194,42 +201,7 @@ $(function () {
             location.href = './index.html?keyword=' + $inp
 
         })
-
-        // var $arr = []
-        // $.ajax({
-        //     url: "./source/blog.json",
-        //     dataType: 'json',
-        //     success(data) {
-        //         $.each(data, function (index, elm) {
-        //             var $title = elm['blogtitle'].toLowerCase()
-        //             if ($title.indexOf($inp) > -1) {
-        //                 $arr.push($title)
-        //             }
-
-        //         })
-        //         handleTitle($arr)
-        //     },
-        //     error(e) {
-        //         console.log(e)
-        //     }
-        // })
     })
-
-
-    // 字符串拼接
-    // function handleTitle(obj) {
-    //     //console.log(obj)
-    //     if (!obj.length) {
-    //         alert('您搜索的内容不存在')
-    //     } else {
-    //         var $T = ''
-    //         for (var i of obj) {
-    //             $T = $T + i + ','
-    //         }
-    //         $(location).attr('href', '../search.html?id=' + escape($T))
-    //     }
-    // }
-
 
     var clientWidth = document.documentElement.clientWidth || body.documentElement.clientWidth
     if (clientWidth <= 375) {
@@ -268,12 +240,9 @@ $(function () {
         </div>
     </div>
     `) 
-
     $('header').append($loginArea)
 
-
     var $login = $(".touxiang")
-    
     $login.dblclick( () => {
         $loginArea.fadeIn()
         return
@@ -313,5 +282,11 @@ $(function () {
                 location.href = '/'
             }
         })
+    })
+
+    $('.password').keydown( function(e) {
+        if(e.keyCode == 13){
+            $('#btn-login').click()
+        }
     })
 })
