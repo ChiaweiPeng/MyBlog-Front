@@ -401,9 +401,9 @@ article{
     padding: 20px 0;
     color: var(--color-font);
 }
-article .article_container{
+/* article .article_container{
     overflow: hidden;
-}
+} */
 article .article_box{
     border-radius: 10px;
     background: var(--color-gray-100);
@@ -420,11 +420,8 @@ article .article_container .left_main{
 article .article_container .right_recom{
     float: right;
     width: 290px;
-}
-article .article_container .right_recom.scrollWith{
-    position: fixed;
-    top: 20px;
-    left:70%;
+    position: sticky;
+    top: 0;
 }
 article .article_container .right_recom .right_selfrecom{
     width: 100%;

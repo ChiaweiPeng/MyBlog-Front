@@ -102,18 +102,6 @@ $(function () {
     })
 
 
-    // 个人信息栏跟随页面
-    $(window).scroll(function () {
-        var offset2 = $(window).scrollTop()
-        // console.log(offset2)
-        if (offset2 >= 500) {
-            $(".right_recom").addClass("scrollWith")
-        } else {
-            $(".right_recom").removeClass("scrollWith")
-        }
-    })
-
-
     /* 正文区 */
     // 右侧图像放大
     $(".right_selfrecom").find(".touxiang").hover(function () {
