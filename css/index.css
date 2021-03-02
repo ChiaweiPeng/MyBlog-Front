@@ -9,7 +9,7 @@ header .header_banner .banner_tab ul.tab_pics{
 }
 header .header_banner .banner_tab ul.tab_pics li{
     display: none;
-    position: absolute;
+    /* position: absolute; */
 }
 header .header_banner .banner_tab ul.tab_pics li:first-child{
     display: block;

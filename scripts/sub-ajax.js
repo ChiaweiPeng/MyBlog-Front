@@ -30,7 +30,7 @@ $(function () {
 
         const data = res.data || []
         data.forEach(item => {
-            $(".article_Ul").prepend($(`
+            $(".article_Ul").append($(`
             <li class="${item.id} articlesLists"><i></i><span class="time">${getFormatDate(item.createtime)}</span><a href="">${item.title}</a>
             </li>
         `))

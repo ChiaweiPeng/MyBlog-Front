@@ -32,7 +32,7 @@ $(function () {
         })
         const ntags = unique(tags)
         ntags.forEach(item => {
-            $(".article_Ul").prepend($(`
+            $(".article_Ul").append($(`
             <li class="articlesLists ${item}"><i></i><a href="">${item}</a>
             </li>
             `))

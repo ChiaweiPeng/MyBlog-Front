@@ -72,7 +72,7 @@ $(function () {
             const $subtitle = $('.new-blog>>.blog-subtitle')
             const $type = $('.new-blog>>.blog-type')
             const $select = $('.new-blog>>#type-sel')
-
+                
             let getUrl = '/api/blog/detail?id=' + id
             get(getUrl).then(res => {
                 if (res.errno != 0) {
@@ -126,7 +126,7 @@ $(function () {
 
                     alert('博客更新成功！')
                     // 打开该更新的博客，并刷新后台页面
-                    window.open('/detail?id=' + id)
+                    window.open('/detail.html?id=' + id)
                     location.href = '/admin/admin.html'
                 })
             })
@@ -176,7 +176,7 @@ $(function () {
     // 打开博客
     $('table').delegate('#open', 'click', function (e) {
         let id = $(this).attr('class')
-        window.open('/detail?id=' + id)
+        window.open('/detail.html?id=' + id)
     })
 
     // 删除博客
